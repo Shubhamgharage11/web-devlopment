@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee Form</title>
+
+<style>
+/* ===== ROOT THEME ===== */
+:root {
+  --primary: #2563eb;
+  --success: #16a34a;
+  --error: #dc2626;
+  --bg: #f8fafc;
+  --text: #1e293b;
+  --border: #cbd5e1;
+}
+
+/* ===== BASE ===== */
+body {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* ===== HEADER ===== */
+header {
+  background: var(--primary);
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* ===== CONTAINER ===== */
+.container {
+  max-width: 900px;
+  margin: 30px auto;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+/* ===== GRID ===== */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.full {
+  grid-column: span 2;
+}
+
+/* ===== INPUTS ===== */
+label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  display: block;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  transition: 0.2s;
+}
+
+input:focus, select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.2);
+  outline: none;
+}
+
+/* ===== STATES ===== */
+input.valid {
+  border-color: var(--success);
+}
+
+input.invalid {
+  border-color: var(--error);
+}
+
+.error {
+  color: var(--error);
+  font-size: 12px;
+}
+
+/* ===== PHOTO ===== */
+#preview {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-top: 10px;
+  display: none;
+  object-fit: cover;
+  border: 2px solid var(--border);
+}
+
+/* ===== BUTTONS ===== */
+.buttons {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+}
+
+button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.2s;
+}
+
+.submit-btn {
+  background: var(--primary);
+  color: white;
+}
+
+.submit-btn:hover {
+  background: #1d4ed8;
+}
+
+.reset-btn {
+  background: var(--error);
+  color: white;
+}
+
+.reset-btn:hover {
+  background: #b91c1c;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 700px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .full {
+    grid-column: span 1;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>Employee Registration</header>
+
+<div class="container">
+<form id="form" novalidate>
+
+<div class="form-grid">
+
+<!-- Employee ID -->
+<div class="full">
+<label>Employee ID</label>
+<input type="text" id="empId" readonly>
+</div>
+
+<!-- Names -->
+<div>
+<label>First Name</label>
+<input id="firstName">
+<div class="error" id="firstNameError"></div>
+</div>
+
+<div>
+<label>Middle Name (Optional)</label>
+<input id="middleName">
+<div class="error" id="middleNameError"></div>
+</div>
+
+<div>
+<label>Last Name</label>
+<input id="lastName">
+<div class="error" id="lastNameError"></div>
+</div>
+
+<!-- DOB -->
+<div>
+<label>DOB (dd/mm/yyyy)</label>
+<input id="dob" placeholder="dd/mm/yyyy">
+<div class="error" id="dobError"></div>
+</div>
+
+<!-- Mobile -->
+<div>
+<label>Mobile</label>
+<input id="mobile" maxlength="10">
+<div class="error" id="mobileError"></div>
+</div>
+
+<!-- Pin -->
+<div>
+<label>Pin Code</label>
+<input id="pincode" maxlength="6">
+<div class="error" id="pincodeError"></div>
+</div>
+
+<!-- Email -->
+<div>
+<label>Email</label>
+<input id="email">
+<div class="error" id="emailError"></div>
+</div>
+
+<!-- Department -->
+<div>
+<label>Department</label>
+<select id="department">
+<option value="">Select</option>
+<option>HR</option>
+<option>IT</option>
+<option>Finance</option>
+</select>
+<div class="error" id="departmentError"></div>
+</div>
+
+<!-- Job -->
+<div>
+<label>Job Title</label>
+<input id="job">
+</div>
+
+<!-- Photo -->
+<div class="full">
+<label>Profile Photo</label>
+<input type="file" id="photo" accept="image/*">
+<img id="preview">
+</div>
+
+</div>
+
+<div class="buttons">
+<button type="submit" class="submit-btn">Submit</button>
+<button type="reset" class="reset-btn">Reset</button>
+</div>
+
+</form>
+</div>
+
+<script>
+// Employee ID
+document.getElementById("empId").value = "EMP" + Math.floor(Math.random()*10000);
+
+// Helper
+function setError(id, msg){
+  const input = document.getElementById(id);
+  input.classList.add("invalid");
+  document.getElementById(id+"Error").textContent = msg;
+}
+
+function setSuccess(id){
+  const input = document.getElementById(id);
+  input.classList.remove("invalid");
+  input.classList.add("valid");
+  document.getElementById(id+"Error").textContent = "";
+}
+
+// Name validation
+function validateName(id, required=true){
+  const val = document.getElementById(id).value.trim();
+  if(!val && required) return setError(id,"Required"), false;
+  if(val && !/^[A-Za-z]+$/.test(val)) return setError(id,"Letters only"), false;
+  setSuccess(id); return true;
+}
+
+// DOB
+function validateDOB(){
+  const val = dob.value.split("/");
+  if(val.length!==3) return setError("dob","Invalid format"), false;
+
+  const d = new Date(val[2], val[1]-1, val[0]);
+  if(d.getDate()!=val[0]) return setError("dob","Invalid date"), false;
+
+  const age = new Date().getFullYear() - val[2];
+  if(age<18 || age>60) return setError("dob","Age 18-60"), false;
+
+  setSuccess("dob"); return true;
+}
+
+// Mobile
+function validateMobile(){
+  if(!/^\d{10}$/.test(mobile.value))
+    return setError("mobile","10 digits"), false;
+  setSuccess("mobile"); return true;
+}
+
+// Pin
+function validatePin(){
+  if(!/^\d{6}$/.test(pincode.value))
+    return setError("pincode","6 digits"), false;
+  setSuccess("pincode"); return true;
+}
+
+// Email
+function validateEmail(){
+  if(!/^\S+@\S+\.\S+$/.test(email.value))
+    return setError("email","Invalid email"), false;
+  setSuccess("email"); return true;
+}
+
+// Department
+function validateDept(){
+  if(!department.value){
+    departmentError.textContent="Required";
+    return false;
+  }
+  departmentError.textContent="";
+  return true;
+}
+
+// Real-time
+["firstName","middleName","lastName"].forEach(id=>{
+  document.getElementById(id).oninput=()=>validateName(id,id!=="middleName");
+});
+dob.oninput=validateDOB;
+mobile.oninput=validateMobile;
+pincode.oninput=validatePin;
+email.oninput=validateEmail;
+
+// Photo preview
+photo.onchange=e=>{
+  preview.src=URL.createObjectURL(e.target.files[0]);
+  preview.style.display="block";
+};
+
+// Submit
+form.onsubmit=e=>{
+  e.preventDefault();
+  if(
+    validateName("firstName") &&
+    validateName("middleName",false) &&
+    validateName("lastName") &&
+    validateDOB() &&
+    validateMobile() &&
+    validatePin() &&
+    validateEmail() &&
+    validateDept()
+  ){
+    alert("Submitted Successfully");
+  } else {
+    alert("Fix errors");
+  }
+};
+
+// Reset
+form.onreset=()=>{
+  document.querySelectorAll(".error").forEach(e=>e.textContent="");
+  document.querySelectorAll("input").forEach(i=>i.classList.remove("valid","invalid"));
+  preview.style.display="none";
+};
+</script>
+
+</body>
+</html>
